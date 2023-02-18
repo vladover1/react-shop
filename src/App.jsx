@@ -6,10 +6,9 @@ import { Outlet } from "react-router-dom";
 
 function App() {
     const [searchValue, setSearchValue] = React.useState('')
-
     return (
         <div className="wrapper">
-            <Header/>
+            <Header searchValue={searchValue}/>
             <div className="content">
               <Outlet />
             </div>
