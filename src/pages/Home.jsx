@@ -7,31 +7,30 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {useOutletContext} from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
+import {useDispatch, useSelector} from "react-redux";
+import  {setCategoryId} from "../redux/slices/filterSlice";
 
 const Home = () => {
+
+    const categoryId = useSelector(state => state.filterSlice.categoryId)
+    const dispatch = useDispatch()
+    const sortType = useSelector(state => state.filterSlice.sort.sortProperty)
+
 
     const searchValue = useOutletContext();
 
     const [items, setItems] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [currentPage, setCurrentPage] = useState(1)
-    const [sortType, setSortType] = useState({
-        name: 'Популярности',
-        sortProperty: 'rating',
-    })
-    const [categoryId, setCategoryId] = useState(0)
 
-    const onChangeCategory = (index) => {
-        setCategoryId(index)
-    }
 
-    const onChangeSort = (index) => {
-        setSortType(index)
+    const onChangeCategory = (id) => {
+        dispatch(setCategoryId(id))
     }
 
     const category = categoryId > 0 ? `category=${categoryId}` : ''
-    const sortBy = sortType.sortProperty.replace('-', '')
-    const order = sortType.sortProperty.includes('-') ? 'asc' : 'desc'
+    const sortBy = sortType.replace('-', '')
+    const order = sortType.includes('-') ? 'asc' : 'desc'
     const search = searchValue ? `&search=${searchValue}` : ''
 
     useEffect(() => {
@@ -55,7 +54,7 @@ const Home = () => {
             <div className="container">
                 <div className="content__top">
                     <Categories categoryId={categoryId} onChangeCategory={onChangeCategory}/>
-                    <Sort sortType={sortType} onChangeSort={onChangeSort}/>
+                    <Sort />
                 </div>
                 <h2 className="content__title">Все пиццы</h2>
                 <div className="content__items">
