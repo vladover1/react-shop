@@ -11,11 +11,8 @@ import {useDispatch, useSelector} from "react-redux";
 import  {setCategoryId} from "../redux/slices/filterSlice";
 
 const Home = () => {
-
-    const categoryId = useSelector(state => state.filterSlice.categoryId)
     const dispatch = useDispatch()
-    const sortType = useSelector(state => state.filterSlice.sort.sortProperty)
-
+    const {categoryId , sort} = useSelector(state => state.filterSlice)
 
     const searchValue = useOutletContext();
 
@@ -29,8 +26,8 @@ const Home = () => {
     }
 
     const category = categoryId > 0 ? `category=${categoryId}` : ''
-    const sortBy = sortType.replace('-', '')
-    const order = sortType.includes('-') ? 'asc' : 'desc'
+    const sortBy = sort.sortProperty.replace('-', '')
+    const order = sort.sortProperty.includes('-') ? 'asc' : 'desc'
     const search = searchValue ? `&search=${searchValue}` : ''
 
     useEffect(() => {
@@ -41,8 +38,7 @@ const Home = () => {
                 setIsLoading(false)
             })
         window.scrollTo(0, 0)
-        // eslint-disable-next-line
-    }, [categoryId, sortType, searchValue, currentPage, category, sortBy, order, search])
+    }, [categoryId, sort.sortProperty, searchValue, currentPage, category, sortBy, order, search])
 
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
 
