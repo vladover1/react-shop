@@ -1,17 +1,23 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useOutletContext} from "react-router-dom";
+import {useOutletContext, useNavigate} from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from "react-redux";
-import {setCategoryId, setCurrentPage} from "../redux/slices/filterSlice";
+import {setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
+import qs from 'qs';
+import {sortList} from "../components/Sort";
 
 const Home = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const isSearch = useRef(false)
+    const isMounted = useRef(false)
+
     const {categoryId, sort, currentPage} = useSelector(state => state.filterSlice)
 
     const searchValue = useOutletContext();
@@ -25,31 +31,68 @@ const Home = () => {
     }
 
     const onChangePage = (number) => {
-       dispatch(setCurrentPage(number))
+        dispatch(setCurrentPage(number))
     }
 
-    const category = categoryId > 0 ? `category=${categoryId}` : ''
-    const sortBy = sort.sortProperty.replace('-', '')
-    const order = sort.sortProperty.includes('-') ? 'asc' : 'desc'
-    const search = searchValue ? `&search=${searchValue}` : ''
-
-    useEffect(() => {
+    const fetchPizzas = () => {
         setIsLoading(true)
-        axios.get(`https://63ecde4fbe929df00cb3e18d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`)
-            .then(response => {
-                setItems(response.data)
+
+        const sortBy = sort.sortProperty.replace('-', '')
+        const order = sort.sortProperty.includes('-') ? 'asc' : 'desc'
+        const category = categoryId > 0 ? `category=${categoryId}` : ''
+        const search = searchValue ? `search=${searchValue}` : ''
+
+        axios
+            .get(`https://63ecde4fbe929df00cb3e18d.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}&${search}`,)
+            .then((res) => {
+                setItems(res.data);
                 setIsLoading(false)
             })
+    }
+
+
+    useEffect(() => {
+        if (isMounted.current) {
+            const queryString = qs.stringify({
+                sortProperty: sort.sortProperty, categoryId, currentPage,
+            });
+
+            navigate(`?${queryString}`);
+        }
+        isMounted.current = true;
+    }, [categoryId, sort.sortProperty, currentPage])
+
+
+    useEffect(() => {
+        if (window.location.search) {
+            const params = qs.parse(window.location.search.substring(1))
+
+            const sort = sortList.find((obj) => obj.sortProperty === params.sortProperty)
+
+            dispatch(setFilters({
+                ...params, sort,
+            }),)
+            isSearch.current = true
+        }
+    }, [])
+
+    useEffect(() => {
         window.scrollTo(0, 0)
-    }, [categoryId, sort.sortProperty, searchValue, currentPage, category, sortBy, order, search])
+
+        if (!isSearch.current) {
+            fetchPizzas()
+        }
+
+        isSearch.current = false;
+    }, [categoryId, sort.sortProperty, searchValue, currentPage])
+
 
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
 
     const pizzas = items
         .map((obj) => <PizzaBlock key={obj.id} {...obj}/>)
 
-    return (
-        <>
+    return (<>
             <div className="container">
                 <div className="content__top">
                     <Categories categoryId={categoryId} onChangeCategory={onChangeCategory}/>
@@ -61,8 +104,7 @@ const Home = () => {
                 </div>
                 <Pagination currentPage={currentPage} onChangePage={onChangePage}/>
             </div>
-        </>
-    );
+        </>);
 };
 
 export default Home;
