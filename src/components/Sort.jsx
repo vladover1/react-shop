@@ -27,7 +27,7 @@ const Sort = () => {
 
     useEffect(() => {
         const handleClickOutside = (evt) => {
-            if (!evt.path.includes(sortRef.current)) {
+            if (!evt.composedPath().includes(sortRef.current)) {
                 setOpen(false)
             }
         }
