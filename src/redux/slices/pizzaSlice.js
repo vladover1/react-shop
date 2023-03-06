@@ -28,12 +28,13 @@ const pizzaSlice = createSlice({
             .addCase(fetchPizza.pending, (state) => {
                 state.status = 'loading';
                 state.items = [];
-                alert(3)
+
 
             })
             .addCase(fetchPizza.fulfilled, (state, action) => {
                 state.items = action.payload;
                 state.status = 'success';
+
             })
             .addCase(fetchPizza.rejected, (state) => {
                 state.status = 'error';

@@ -46,6 +46,7 @@ const Home = () => {
                 order,
                 category,
                 search,
+                currentPage
             }),
         );
 
