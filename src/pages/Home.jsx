@@ -66,10 +66,9 @@ const Home = () => {
     }, [categoryId, sort.sortProperty, currentPage])
 
 
-
     useEffect(() => {
-            getPizzas().then()
-    }, [categoryId, sort.sortProperty, searchValue, currentPage])
+        getPizzas().then()
+    }, [])
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -102,9 +101,14 @@ const Home = () => {
                 <Sort/>
             </div>
             <h2 className="content__title">Все пиццы</h2>
-            <div className="content__items">
-                {status === 'loading' ? skeletons : pizzas}
-            </div>
+            {
+                status === 'error'
+                    ? <div>Произошла ошибка , не удалось получить пиццы</div>
+                    : <div className="content__items">
+                        {status === 'loading' ? skeletons : pizzas}
+                    </div>
+            }
+
             <Pagination currentPage={currentPage} onChangePage={onChangePage}/>
         </div>
     </>);
