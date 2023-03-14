@@ -7,10 +7,10 @@ import {useEffect} from "react";
 import {useOutletContext, useNavigate} from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from "react-redux";
-import {setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
+import {selectFilter, setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
 import qs from 'qs';
 import {sortList} from "../components/Sort";
-import {fetchPizza} from "../redux/slices/pizzaSlice";
+import {fetchPizza, selectPizzaData} from "../redux/slices/pizzaSlice";
 
 
 const Home = () => {
@@ -19,8 +19,8 @@ const Home = () => {
     const isSearch = useRef(false)
     const isMounted = useRef(false)
 
-    const {categoryId, sort, currentPage} = useSelector(state => state.filterSlice)
-    const {items, status} = useSelector(state => state.pizzaSlice)
+    const {categoryId, sort, currentPage} = useSelector(selectFilter)
+    const {items, status} = useSelector(selectPizzaData)
 
     const searchValue = useOutletContext();
 
@@ -39,6 +39,7 @@ const Home = () => {
         const order = sort.sortProperty.includes('-') ? 'asc' : 'desc'
         const category = categoryId > 0 ? `category=${categoryId}` : ''
         const search = searchValue ? `search=${searchValue}` : ''
+
 
         dispatch(
             fetchPizza({
