@@ -69,7 +69,7 @@ const Home = () => {
 
     useEffect(() => {
         getPizzas().then()
-    }, [])
+    }, [currentPage, categoryId, sort])
 
     useEffect(() => {
         window.scrollTo(0, 0)
