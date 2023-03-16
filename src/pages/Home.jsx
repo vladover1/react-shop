@@ -19,11 +19,8 @@ const Home = () => {
     const isSearch = useRef(false)
     const isMounted = useRef(false)
 
-    const {categoryId, sort, currentPage} = useSelector(selectFilter)
+    const {categoryId, sort, currentPage, searchValue} = useSelector(selectFilter)
     const {items, status} = useSelector(selectPizzaData)
-
-    const searchValue = useOutletContext();
-
 
     const onChangeCategory = (id) => {
         dispatch(setCategoryId(id))
@@ -69,7 +66,7 @@ const Home = () => {
 
     useEffect(() => {
         getPizzas().then()
-    }, [currentPage, categoryId, sort])
+    }, [currentPage, categoryId, sort, searchValue])
 
     useEffect(() => {
         window.scrollTo(0, 0)
