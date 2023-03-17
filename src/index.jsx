@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import {createBrowserRouter, RouterProvider,} from "react-router-dom"
+import FullPizza from "./pages/fullPizza";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
                 path: "*",
                 element: <NotFound/>,
             },
+            {
+                path: '/pizza/:id',
+                element: <FullPizza/>,
+            }
         ],
     },
 ])
