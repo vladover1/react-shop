@@ -4,7 +4,7 @@ import Sort from "../components/Sort";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import PizzaBlock from "../components/PizzaBlock/PizzaBlock";
 import {useEffect} from "react";
-import {useOutletContext, useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 import Pagination from "../components/Pagination/Pagination";
 import {useDispatch, useSelector} from "react-redux";
 import {selectFilter, setCategoryId, setCurrentPage, setFilters} from "../redux/slices/filterSlice";
@@ -90,7 +90,7 @@ const Home = () => {
     const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index}/>)
 
     const pizzas = items
-        .map((obj) => <PizzaBlock key={obj.id} {...obj}/>)
+        .map((obj) => <Link key={obj.id} to={`/pizza/${obj.id}`}><PizzaBlock {...obj}/></Link>)
 
     return (<>
         <div className="container">
