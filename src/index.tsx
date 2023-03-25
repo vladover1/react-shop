@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import {createBrowserRouter, RouterProvider,} from "react-router-dom"
 import FullPizza from "./pages/fullPizza";
-import App from "./App.tsx"
+import App from "./App"
 
 const router = createBrowserRouter([
     {
@@ -27,14 +27,14 @@ const router = createBrowserRouter([
             },
             {
                 path: '/pizza/:id',
-                element: <FullPizza/>,
+                element: <FullPizza />,
             }
         ],
     },
 ])
 
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <RouterProvider router={router}/>
     </React.StrictMode>

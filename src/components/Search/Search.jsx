@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import styles from './Search.module.scss'
 import debounce from 'lodash.debounce'
 import {useDispatch} from "react-redux";
