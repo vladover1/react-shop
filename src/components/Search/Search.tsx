@@ -15,9 +15,9 @@ const Search: React.FC = () => {
         inputRef.current?.focus()
     }
 
-    const onChangeInput = (evt: any) => {
-        setValue(evt.target.value)
-        updateSearchValue(evt.target.value)
+    const onChangeInput = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(evt.target?.value)
+        updateSearchValue(evt.target?.value)
     }
 
     const updateSearchValue = useCallback(
